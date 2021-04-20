@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /usr/bin/env python
 import scapy.all as scapy
 from scapy.layers import http
 
@@ -8,8 +8,15 @@ from scapy.layers import http
 
 def sniff(interface):
     scapy.sniff(iface=interface,store=False, prn=process_sniffed_packet)
-# function which will check if there is a HTTP Request in it, if yes then it will be printed. Its ising scapy.layers
+
+
+# function which will check if there is a HTTP Request in it, if yes it will
+# also check RAW layer which was shown by packet.show and its the layer which contain username and password information
+# if this condition is also met it will be printed. Its ising scapy.layers
+
 def process_sniffed_packet(packet):
     if packet.haslayer(http.HTTPRequest):
-        print(packet)
+        if packet.haslayer(scapy.Raw):
+            print(packet)
+            #print(packet.show())
 sniff("en0")
